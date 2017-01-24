@@ -29,5 +29,6 @@ int main(int argc, char **argv) {
 	}
 
 	printf("%lu\n", fnv(fp));
+	fclose(fp);
 	return 0;
 }
