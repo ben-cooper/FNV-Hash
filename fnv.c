@@ -4,13 +4,12 @@
 #define FNVPRIME 1099511628211
 
 uint64_t fnv(FILE *fp) {
-	int8_t in;
-	uint8_t chr;
+	int read = 0;
+	uint8_t buffer[1];
 	uint64_t hash = FNVOFFSET;
 
-	while ((in = fgetc(fp)) != EOF) {
-		chr = (uint8_t) in;
-		hash ^= chr;
+	while ((read = fread(buffer, 1, 1, fp)) > 0) {
+		hash ^= *buffer;
 		hash *= FNVPRIME;
 	}
 
@@ -25,7 +24,7 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 	
-	if (!(fp = fopen(argv[1], "r"))) {
+	if (!(fp = fopen(argv[1], "rb"))) {
 		perror("fopen");
 		return 1;
 	}
