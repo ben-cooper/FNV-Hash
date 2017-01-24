@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	printf("%lu\n", fnv(fp));
+	printf("%lx\n", fnv(fp));
 	fclose(fp);
 	return 0;
 }
