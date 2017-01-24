@@ -7,11 +7,13 @@ uint64_t fnv(FILE *fp) {
 	int8_t in;
 	uint8_t chr;
 	uint64_t hash = FNVOFFSET;
+
 	while ((in = fgetc(fp)) != EOF) {
 		chr = (uint8_t) in;
 		hash ^= chr;
 		hash *= FNVPRIME;
 	}
+
 	return hash;
 }
 
