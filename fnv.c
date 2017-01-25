@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <errno.h>
 #include <stdint.h>
 #include <stdlib.h>
 #define FNVOFFSET 14695981039346656037U
@@ -49,8 +50,14 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 	
-	if (argc == 3)
+	if (argc == 3) {
+		errno = 0;
 		size = strtoul(argv[2], &str, 10);
+		if ((*str != '\0') || (errno == ERANGE)) {
+			fprintf(stderr, "Invalid buffer size!\n");
+			return 1;
+		}
+	}
 
 	printf("%lx\n", fnv(fp, size));
 	fclose(fp);
