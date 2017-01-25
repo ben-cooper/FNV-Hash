@@ -1,18 +1,37 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #define FNVOFFSET 14695981039346656037U
 #define FNVPRIME 1099511628211
+#define BUFLEN 131072
 
-uint64_t fnv(FILE *fp) {
-	int read = 0;
-	uint8_t buffer[1];
-	uint64_t hash = FNVOFFSET;
+void *emalloc(size_t size) {
+	void *result;
 
-	while ((read = fread(buffer, 1, 1, fp)) > 0) {
-		hash ^= *buffer;
-		hash *= FNVPRIME;
+	if (!(result = malloc(size))) {
+		perror("malloc");
+		exit(1);
 	}
 
+	return result;
+}
+
+
+uint64_t fnv(FILE *fp) {
+	size_t read = 0;
+	size_t i;
+
+	uint8_t *buffer = (uint8_t *) emalloc(BUFLEN);
+	uint64_t hash = FNVOFFSET;
+
+	while ((read = fread(buffer, 1, BUFLEN, fp)) > 0) {
+		for (i=0; i < read; i++) {
+			hash ^= buffer[i];
+			hash *= FNVPRIME;
+		}
+	}
+
+	free(buffer);
 	return hash;
 }
 
