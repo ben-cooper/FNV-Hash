@@ -5,7 +5,8 @@
 #define FNVOFFSET 14695981039346656037U
 #define FNVPRIME 1099511628211
 
-void *emalloc(size_t size) {
+void *emalloc(size_t size)
+{
 	void *result;
 
 	if (!(result = malloc(size))) {
@@ -16,8 +17,8 @@ void *emalloc(size_t size) {
 	return result;
 }
 
-
-uint64_t fnv(FILE *fp, size_t bufsize) {
+uint64_t fnv(FILE * fp, size_t bufsize)
+{
 	size_t read = 0;
 	size_t i;
 
@@ -25,7 +26,7 @@ uint64_t fnv(FILE *fp, size_t bufsize) {
 	uint64_t hash = FNVOFFSET;
 
 	while ((read = fread(buffer, 1, bufsize, fp)) > 0) {
-		for (i=0; i < read; i++) {
+		for (i = 0; i < read; i++) {
 			hash ^= buffer[i];
 			hash *= FNVPRIME;
 		}
@@ -35,21 +36,23 @@ uint64_t fnv(FILE *fp, size_t bufsize) {
 	return hash;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
 	FILE *fp;
 	char *str;
 	unsigned long size = 131072;
 
 	if ((argc != 2) && (argc != 3)) {
-		fprintf(stderr, "usage: %s input_file [buffer_size_in_bytes]\n", argv[0]);
+		fprintf(stderr, "usage: %s input_file [buffer_size_in_bytes]\n",
+			argv[0]);
 		return 1;
 	}
-	
+
 	if (!(fp = fopen(argv[1], "rb"))) {
 		perror("fopen");
 		return 1;
 	}
-	
+
 	if (argc == 3) {
 		errno = 0;
 		size = strtoul(argv[2], &str, 10);
