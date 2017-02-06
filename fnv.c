@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 	if (argc == 3) {
 		errno = 0;
 		size = strtoul(argv[2], &str, 10);
-		if ((*str != '\0') || (errno == ERANGE)) {
+		if ((*str != '\0') || (errno == ERANGE) || (size == 0)) {
 			fprintf(stderr, "Invalid buffer size!\n");
 			return 1;
 		}
